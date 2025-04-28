@@ -1,143 +1,94 @@
-import  java.util.*;
-public class exampels {
-public static  void main(String[] args) {
- 
+import java.util.*; 
 
-Scanner inPut = new Scanner(System.in) ;
- boolean GameOn = true ;
- char winner = '\u0000';
+public class Main {
+    public static void main(String[] args) {
+        Scanner inPut = new Scanner(System.in);
+         char[][] Game = new char[3][3];
+          
+
+         int row , column ; 
+        boolean GameOn = true ; 
+        char Winner = '\u0000'; 
+
+         System.out.println("  (0,0)  ,  (0,1)  ,  (0,2)  .");
+         System.out.println("  (1,0)  ,  (1,1)  ,  (1,2)  .");
+         System.out.println("  (2,0)  ,  (2,1)  ,  (2,2)  .");
 
 
-    int row , col ;
-    
-    System.out.println("  (0,0)  ,  (0,1)  ,  (0,2)  .");
-    System.out.println("  (1,0)  ,  (1,1)  ,  (1,2)  .");
-    System.out.println("  (2,0)  ,  (2,1)  ,  (2,2)  .");
 
+         while (GameOn) {
+            System.out.println("Enter the row: ");
+            row = inPut.nextInt();
+            System.out.println("Enter the column: ");
+            column = inPut.nextInt();
 
-    char [][]Game = new char[3][3] ; 
-    
-  while(GameOn){  
-     System.out.println(" Enter the location : \n Enter the row :  ") ; 
-      row = inPut.nextInt();
-      System.out.println(" Enter the col : ");
-      col = inPut.nextInt();
- 
+            if (row >= 0 && row < 3 && column >= 0 && column < 3) {
+                if (Game[row][column] == '\u0000') {
+                    System.out.println("Enter the Letter (X or O): ");
+                    char Letter = inPut.next().toUpperCase().charAt(0);
 
-   
-    System.out.println("Enter the Letter : ");
-    char Letter = inPut.next().charAt(0) ;
+                    if (Letter == 'X' || Letter == 'O') {
+                        Game[row][column] = Letter;
+                    } else {
+                        System.out.println("Invalid letter. Please enter X or O only.");
+                        continue;
+                    }
+                } else {
+                    System.out.println("The site is booked. Try another site.");
+                    continue;
+                }
+            } else {
+                System.out.println("Outside the limits of the game.");
+                continue;
+            }
 
-    Game[row][col] = Letter ; 
-       
-   
+            // طباعة اللوحة
+            System.out.println("Current Board:");
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    System.out.print(Game[i][j] == '\u0000' ? "." : Game[i][j]);
+                    System.out.print(" ");
+                }
+                System.out.println();
+            }
 
-// التحقق من الحدود واذا ضمن الحدود بطبع الحرف . ا
+            // التحقق من الفائز
+            for (char player : new char[]{'X', 'O'}) {
+                if (
+                    (Game[0][0] == player && Game[0][1] == player && Game[0][2] == player) ||
+                    (Game[1][0] == player && Game[1][1] == player && Game[1][2] == player) ||
+                    (Game[2][0] == player && Game[2][1] == player && Game[2][2] == player) ||
+                    (Game[0][0] == player && Game[1][0] == player && Game[2][0] == player) ||
+                    (Game[0][1] == player && Game[1][1] == player && Game[2][1] == player) ||
+                    (Game[0][2] == player && Game[1][2] == player && Game[2][2] == player) ||
+                    (Game[0][0] == player && Game[1][1] == player && Game[2][2] == player) ||
+                    (Game[0][2] == player && Game[1][1] == player && Game[2][0] == player)
+                ) {
+                    Winner = player;
+                    GameOn = false;
+                    break;
+                }
+            }
 
-     if(row >= 0 && row < 3 && col >= 0 && col < 3){
-      if(Game[row][col] == '\u0000') {
-        System.out.println("The site is booked. Try another site.");
-      }else{
-        Game[row][col] = Letter ; 
-      }
-     }else{
-      System.out.println("The site is out of bounds .");
-     }
-       // التحقق من ان المكان ممتلئ 
-     boolean Full = true ;
-     for(int i = 0 ; i<3 ; i++){
-       for(int j = 0 ; j<3 ; j++){
-       if (Game[i][j] == '\u0000'){
-        Full = false ;
-        break ;
-       }
-     }
+            // التحقق من امتلاء اللوحة
+            boolean Full = true;
+            for (int i = 0; i < 3 && Full; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (Game[i][j] == '\u0000') {
+                        Full = false;
+                        break;
+                    }
+                }
+            }
+
+            if (Full && Winner == '\u0000') {
+                System.out.println("The game is a draw.");
+                GameOn = false;
+            }
+
+            if (Winner != '\u0000') {
+                System.out.println("Player " + Winner + " wins!");
+            }
+        }
     }
-
-
-
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 3; j++) {
-          System.out.print(Game[i][j] == '\u0000' ? "." : Game[i][j] );
-          System.out.print("  ");
-      }
-      System.out.println();
-  }
-
-      if(Full){
-        System.out.println("The Game is ended  .");
-        GameOn = false ;
-      }
-
-
-   
-
-
-
-
-
-    for (int i = 0; i < 3; i++) {
-      if (Game[i][0] != '\u0000' &&
-          Game[i][0] == Game[i][1] &&
-          Game[i][1] == Game[i][2]) {
-          winner = Game[i][0];
-          GameOn = false;
-      }
-  }
-
-
-  for (int j = 0; j < 3; j++) {
-    if (Game[0][j] != '\u0000' &&
-        Game[0][j] == Game[1][j] &&
-        Game[1][j] == Game[2][j]) {
-        winner = Game[0][j];
-        GameOn = false;
-    }
-} 
-
-
-
-if (Game[0][0] != '\u0000' &&
-    Game[0][0] == Game[1][1] &&
-    Game[1][1] == Game[2][2]) {
-    winner = Game[0][0];
-    GameOn = false;
 }
- 
-
-
-if (Game[0][2] != '\u0000' &&
-    Game[0][2] == Game[1][1] &&
-    Game[1][1] == Game[2][0]) {
-    winner = Game[0][2];
-    GameOn = false;
-}
-
-
-if (!GameOn && winner != '\u0000') {
-  System.out.println("Player " + winner + " wins!");
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
-
-
-
-    inPut.close(); 
-  } 
-}
-
- 
-
